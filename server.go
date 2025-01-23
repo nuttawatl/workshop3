@@ -506,7 +506,7 @@ func setupRouter(h *Handler) *gin.Engine {
 	router.GET("/transactions", h.GetAllTransactions)
 
 	router.POST("/accounts/:accountNumber/transfers", h.CreateTransfer)
-	// TODO:	router.POST("/accounts/:accountNumber/schedules", h.CreateSchedules)
+	router.POST("/accounts/:accountNumber/schedules", h.CreateSchedules)
 
 	router.GET("/features", func(c *gin.Context) {
 		c.JSON(http.StatusOK, firebase.AllConfigs())
