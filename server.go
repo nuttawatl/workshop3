@@ -221,7 +221,7 @@ func (h *Handler) GetSchedules(c *gin.Context) {
 	accountNo := c.Param("accountNumber")
 	// query only  status = 'SCHEDULED'
 	rows, err := h.db.Query(`
-        SELECT schedule_id, from_account, to_account, to_account_name, to_bank, amount, note, CONVERT(VARCHAR(10),schedule_date,120) AS schedule_date
+        SELECT schedule_id, from_account, to_account, to_account_name, to_bank, amount, note, schedule_date
         FROM schedules
         WHERE from_account = $1
         AND status = 'SCHEDULED'
@@ -238,11 +238,20 @@ func (h *Handler) GetSchedules(c *gin.Context) {
 	// TODO: Implement the logic to fetch schedules from the database
 	for rows.Next() {
 		var sch Schedule
-		if err := rows.Scan(&sch.ScheduleID, &sch.FromAccount, &sch.ToAccount, &sch.ToAccountName, &sch.ToBank, &sch.Amount, &sch.Note, &sch.ScheduleDate); err != nil {
+		var scheduleDate string
+		if err := rows.Scan(&sch.ScheduleID, &sch.FromAccount, &sch.ToAccount, &sch.ToAccountName, &sch.ToBank, &sch.Amount, &sch.Note, &scheduleDate); err != nil {
 			log.Println(err)
 			c.JSON(http.StatusInternalServerError, gin.H{"error": "unable to get schedules"})
 			return
 		}
+
+		layout := "2006-01-02" // Example format (adjust to match your actual date format)
+		parsedDate, err := time.Parse(layout, scheduleDate)
+		if err != nil {
+			log.Printf("Failed to parse date %s: %v", scheduleDate, err)
+			continue
+		}
+		sch.ScheduleDate = parsedDate
 		schedules = append(schedules, sch)
 	}
 
