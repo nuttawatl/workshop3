@@ -43,13 +43,13 @@ type Transaction struct {
 
 type Schedule struct {
 	ScheduleID    string    `json:"schedule_id"`
-	FromAccount   string    `json:"from_account"`
-	ToAccount     string    `json:"to_account"`
-	ToAccountName string    `json:"to_account_name"`
-	ToBank        string    `json:"to_bank"`
+	FromAccount   string    `json:"fromAccount"`
+	ToAccount     string    `json:"toAccount"`
+	ToAccountName string    `json:"toAccountName"`
+	ToBank        string    `json:"toBank"`
 	Amount        int64     `json:"amount"`
 	Note          string    `json:"note"`
-	ScheduleDate  time.Time `json:"schedule_date"`
+	ScheduleDate  time.Time `json:"date"`
 }
 
 // Request & Response Structs
@@ -314,11 +314,14 @@ func (h *Handler) CreateSchedules(c *gin.Context) {
 	// Create schedule entry in the database
 	schID := scheduleID()
 	status := "SCHEDULED"
-
-	// TODO: Implement the logic to create a schedule in the database
-	fmt.Println(fromAccount)
-	fmt.Println(toAccountName)
-
+	_, err = h.db.Exec(`
+		   INSERT INTO schedules (schedule_id, from_account, to_account, to_account_name, to_bank, amount, currency, note, status, schedule, schedule_date, end_date)
+		   VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12);`,
+		schID, fromAccount, req.ToAccount, toAccountName, req.ToBank, req.Amount, req.Currency, req.Note, status, req.Schedule, req.StartDate, req.EndDate)
+	if err != nil {
+		handleScheduleError(c, err, "unable to schedule transfer")
+		return
+	}
 	// Send the response with schedule details
 	resp := ScheduleResponse{
 		ScheduleID:   schID,
