@@ -42,7 +42,7 @@ type Transaction struct {
 }
 
 type Schedule struct {
-	ScheduleID    string    `json:"schedule_id"`
+	ScheduleID    string    `json:"scheduleId"`
 	FromAccount   string    `json:"fromAccount"`
 	ToAccount     string    `json:"toAccount"`
 	ToAccountName string    `json:"toAccountName"`
