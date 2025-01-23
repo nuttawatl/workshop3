@@ -42,14 +42,14 @@ type Transaction struct {
 }
 
 type Schedule struct {
-	ScheduleID    string    `json:"scheduleId"`
-	FromAccount   string    `json:"fromAccount"`
-	ToAccount     string    `json:"toAccount"`
-	ToAccountName string    `json:"toAccountName"`
-	ToBank        string    `json:"toBank"`
+	ScheduleID    string    `json:"schedule_id"`
+	FromAccount   string    `json:"from_account"`
+	ToAccount     string    `json:"to_account"`
+	ToAccountName string    `json:"to_account_name"`
+	ToBank        string    `json:"to_bank"`
 	Amount        int64     `json:"amount"`
 	Note          string    `json:"note"`
-	ScheduleDate  time.Time `json:"date"`
+	ScheduleDate  time.Time `json:"schedule_date"`
 }
 
 // Request & Response Structs
