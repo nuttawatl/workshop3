@@ -245,7 +245,7 @@ func (h *Handler) GetSchedules(c *gin.Context) {
 			return
 		}
 
-		layout := "2006-01-02" // Example format (adjust to match your actual date format)
+		layout := "2006-01-02 15:04:05" // Example format (adjust to match your actual date format)
 		parsedDate, err := time.Parse(layout, scheduleDate)
 		if err != nil {
 			log.Printf("Failed to parse date %s: %v", scheduleDate, err)
