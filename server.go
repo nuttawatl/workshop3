@@ -236,6 +236,15 @@ func (h *Handler) GetSchedules(c *gin.Context) {
 
 	schedules := []Schedule{}
 	// TODO: Implement the logic to fetch schedules from the database
+	for rows.Next() {
+		var sch Schedule
+		if err := rows.Scan(&sch.ScheduleID, &sch.FromAccount, &sch.ToAccount, &sch.ToAccountName, &sch.ToBank, &sch.Amount, &sch.Note, &sch.ScheduleDate); err != nil {
+			log.Println(err)
+			c.JSON(http.StatusInternalServerError, gin.H{"error": "unable to get schedules"})
+			return
+		}
+		schedules = append(schedules, sch)
+	}
 
 	c.JSON(http.StatusOK, schedules)
 }
