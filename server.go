@@ -221,7 +221,7 @@ func (h *Handler) GetSchedules(c *gin.Context) {
 	accountNo := c.Param("accountNumber")
 	// query only  status = 'SCHEDULED'
 	rows, err := h.db.Query(`
-        SELECT schedule_id, from_account, to_account, to_account_name, to_bank, amount, note, schedule_date
+        SELECT schedule_id, from_account, to_account, to_account_name, to_bank, amount, note, CONVERT(VARCHAR(10),schedule_date,120) AS schedule_date
         FROM schedules
         WHERE from_account = $1
         AND status = 'SCHEDULED'
